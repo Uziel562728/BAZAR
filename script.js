@@ -156,14 +156,22 @@ function reemplazarBotonPorControl(productId) {
 }
 
 function cambiarCantidad(productId, delta) {
-    const item = carrito.find(p => p.id === productId);
-    if (!item) return;
+    const itemIndex = carrito.findIndex(p => p.id === productId);
+    if (itemIndex === -1) return;
 
-    item.cantidad = Math.max(1, item.cantidad + delta);
+    carrito[itemIndex].cantidad += delta;
 
-    // Actualizo el span en la UI
-    const cantidadSpan = document.getElementById(cantidad-${productId});
-    cantidadSpan.textContent = item.cantidad;
+    // Si la cantidad llegó a 0, eliminamos del carrito y volvemos a mostrar el botón
+    if (carrito[itemIndex].cantidad <= 0) {
+        carrito.splice(itemIndex, 1); // Eliminar del carrito
+
+        const productDiv = document.getElementById(product-${productId});
+        productDiv.innerHTML = <button class="add-to-cart" onclick="addToCartDirect(${productId})">Agregar al carrito</button>;
+    } else {
+        // Si sigue siendo mayor que 0, actualizar el número en pantalla
+        const cantidadSpan = document.getElementById(cantidad-${productId});
+        cantidadSpan.textContent = carrito[itemIndex].cantidad;
+    }
 
     actualizarContador();
     renderCarrito();
