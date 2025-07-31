@@ -116,11 +116,55 @@ function closeCart() {
 function addToCartDirect(productId) {
     const producto = productos.find(p => p.id === productId);
     const existe = carrito.find(item => item.id === producto.id);
+
     if (existe) {
         existe.cantidad += 1;
     } else {
         carrito.push({ ...producto, cantidad: 1 });
+        // Reemplazar el botón por control de cantidad en el DOM
+        reemplazarBotonPorControl(productId);
     }
+
+    actualizarContador();
+    renderCarrito();
+}
+
+function reemplazarBotonPorControl(productId) {
+    const productDiv = document.getElementById(product-${productId});
+    productDiv.innerHTML = ""; // Limpiar el contenido actual (el botón)
+
+    const contadorDiv = document.createElement("div");
+    contadorDiv.className = "contador";
+
+    const btnMenos = document.createElement("button");
+    btnMenos.textContent = "-";
+    btnMenos.onclick = () => cambiarCantidad(productId, -1);
+
+    const cantidadSpan = document.createElement("span");
+    cantidadSpan.textContent = "1";
+    cantidadSpan.id = cantidad-${productId};
+
+    const btnMas = document.createElement("button");
+    btnMas.textContent = "+";
+    btnMas.onclick = () => cambiarCantidad(productId, 1);
+
+    contadorDiv.appendChild(btnMenos);
+    contadorDiv.appendChild(cantidadSpan);
+    contadorDiv.appendChild(btnMas);
+
+    productDiv.appendChild(contadorDiv);
+}
+
+function cambiarCantidad(productId, delta) {
+    const item = carrito.find(p => p.id === productId);
+    if (!item) return;
+
+    item.cantidad = Math.max(1, item.cantidad + delta);
+
+    // Actualizo el span en la UI
+    const cantidadSpan = document.getElementById(cantidad-${productId});
+    cantidadSpan.textContent = item.cantidad;
+
     actualizarContador();
     renderCarrito();
 }
