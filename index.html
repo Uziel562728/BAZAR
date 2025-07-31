@@ -1,10 +1,671 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bazar Online</title>
-    <link rel="stylesheet" href="style.css" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #ffffff;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        header {
+            background: linear-gradient(135deg, #FFA500, #ff8c00);
+            color: white;
+            padding: 1rem 0;
+            box-shadow: 0 2px 10px rgba(255, 165, 0, 0.3);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        h1 {
+            font-size: 2rem;
+            font-weight: 700;
+        }
+
+        .cart-button {
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid white;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .cart-button:hover {
+            background: white;
+            color: #FFA500;
+            transform: translateY(-2px);
+        }
+
+        .cart-count {
+            background: #ff6b00;
+            color: white;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        main {
+            padding: 2rem 0;
+        }
+
+        .intro {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .intro h2 {
+            color: #FFA500;
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .intro p {
+            font-size: 1.2rem;
+            color: #666;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Carrusel de productos */
+        .carousel-section {
+            background: linear-gradient(135deg, #FFF5E6, #FFE4B5);
+            padding: 3rem 0;
+            margin: 3rem 0;
+            border-radius: 15px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .carousel-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="10" cy="10" r="1" fill="%23FFA500" opacity="0.1"/><circle cx="90" cy="20" r="1.5" fill="%23FFA500" opacity="0.1"/><circle cx="20" cy="80" r="1" fill="%23FFA500" opacity="0.1"/><circle cx="80" cy="90" r="1.5" fill="%23FFA500" opacity="0.1"/></svg>');
+        }
+
+        .carousel-title {
+            text-align: center;
+            color: #FFA500;
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .carousel-container {
+            position: relative;
+            max-width: 1200px;
+            margin: 0 auto;
+            overflow: hidden;
+            border-radius: 10px;
+            z-index: 2;
+        }
+
+        .carousel-track {
+            display: flex;
+            transition: transform 0.8s ease-in-out;
+            gap: 20px;
+            will-change: transform;
+        }
+
+        .carousel-track.no-transition {
+            transition: none;
+        }
+
+        .carousel-item {
+            min-width: 250px;
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            position: relative;
+        }
+
+        .carousel-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(255, 165, 0, 0.3);
+            border-color: #FFA500;
+        }
+
+        .carousel-emoji {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .carousel-product-name {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 0.5rem;
+            min-height: 2.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .carousel-product-price {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #FFA500;
+            margin-bottom: 1rem;
+        }
+
+        .carousel-indicators {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 2rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .carousel-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255, 165, 0, 0.3);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .carousel-dot.active {
+            background: #FFA500;
+            transform: scale(1.2);
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin-top: 2rem;
+            max-width: 400px;
+            margin-left: auto;
+            margin-right: auto;
+            padding: 0 20px;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 3px 15px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            width: 100%;
+            aspect-ratio: 4/5;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(255, 165, 0, 0.3);
+            border-color: #FFA500;
+        }
+
+        .product-image {
+            width: 100%;
+            height: 70px;
+            background: linear-gradient(45deg, #f0f0f0, #e0e0e0);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: #ccc;
+        }
+
+        .product-info {
+            padding: 0.8rem;
+            display: flex;
+            flex-direction: column;
+            height: calc(100% - 70px);
+            justify-content: space-between;
+        }
+
+        .product-name {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 0.3rem;
+            line-height: 1.2;
+            text-align: center;
+        }
+
+        .product-description {
+            font-size: 0.7rem;
+            color: #666;
+            margin-bottom: 0.4rem;
+            text-align: center;
+            line-height: 1.2;
+        }
+
+        .product-price {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #FFA500;
+            margin-bottom: 0.5rem;
+            text-align: center;
+        }
+
+        .add-to-cart {
+            width: 100%;
+            background: #FFA500;
+            color: white;
+            border: none;
+            padding: 8px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .add-to-cart:hover {
+            background: #ff8c00;
+            transform: translateY(-1px);
+        }
+
+        .quantity-controls-product {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            background: #f8f8f8;
+            border-radius: 6px;
+            padding: 4px 6px;
+            border: 2px solid #FFA500;
+        }
+
+        .quantity-btn-product {
+            background: #FFA500;
+            color: white;
+            border: none;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .quantity-btn-product:hover {
+            background: #ff8c00;
+            transform: scale(1.1);
+        }
+
+        .quantity-display {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #333;
+            min-width: 25px;
+            text-align: center;
+        }
+
+        /* Carrito flotante */
+        .cart-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .cart-overlay.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .cart-sidebar {
+            background: white;
+            width: 400px;
+            height: 100%;
+            position: fixed;
+            right: -400px;
+            top: 0;
+            transition: right 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            box-shadow: -5px 0 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .cart-sidebar.active {
+            right: 0;
+        }
+
+        .cart-header {
+            background: #FFA500;
+            color: white;
+            padding: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .cart-header h3 {
+            font-size: 1.3rem;
+        }
+
+        .close-cart {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 50%;
+            transition: background 0.3s ease;
+        }
+
+        .close-cart:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .cart-content {
+            flex: 1;
+            padding: 1rem;
+            overflow-y: auto;
+        }
+
+        .cart-item {
+            background: #f9f9f9;
+            border-radius: 10px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-left: 4px solid #FFA500;
+        }
+
+        .cart-item-name {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+
+        .cart-item-details {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .quantity-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .quantity-btn {
+            background: #FFA500;
+            color: white;
+            border: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .quantity-btn:hover {
+            background: #ff8c00;
+        }
+
+        .cart-total {
+            background: #FFA500;
+            color: white;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .total-amount {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .whatsapp-btn {
+            background: #25D366;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .whatsapp-btn:hover {
+            background: #20b358;
+            transform: translateY(-2px);
+        }
+
+        .empty-cart {
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .empty-cart h4 {
+            color: #333;
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+
+        .empty-cart p {
+            font-style: italic;
+            margin-bottom: 1.5rem;
+            color: #888;
+        }
+
+        .explore-catalog-btn {
+            background: #FFA500;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .explore-catalog-btn:hover {
+            background: #ff8c00;
+            transform: translateY(-2px);
+        }
+
+        /* Botón flotante de WhatsApp */
+        .whatsapp-float {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            background: #25D366;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 999;
+            text-decoration: none;
+            animation: pulse 2s infinite;
+        }
+
+        .whatsapp-float:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 25px rgba(37, 211, 102, 0.6);
+        }
+
+        .whatsapp-float span {
+            font-size: 24px;
+            color: white;
+        }
+
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4);
+            }
+            50% {
+                box-shadow: 0 4px 30px rgba(37, 211, 102, 0.7);
+            }
+            100% {
+                box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            h1 {
+                font-size: 1.5rem;
+            }
+
+            .intro h2 {
+                font-size: 2rem;
+            }
+
+            .products-grid {
+                gap: 0.8rem;
+                max-width: 100%;
+                padding: 0 15px;
+            }
+
+            .product-image {
+                height: 55px;
+                font-size: 1.6rem;
+            }
+
+            .product-info {
+                padding: 0.6rem;
+                height: calc(100% - 55px);
+            }
+
+            .product-name {
+                font-size: 0.75rem;
+                margin-bottom: 0.2rem;
+            }
+
+            .product-description {
+                font-size: 0.65rem;
+                margin-bottom: 0.3rem;
+            }
+
+            .product-price {
+                font-size: 0.9rem;
+                margin-bottom: 0.4rem;
+            }
+
+            .add-to-cart {
+                padding: 6px;
+                font-size: 0.7rem;
+            }
+
+            .quantity-btn-product {
+                width: 20px;
+                height: 20px;
+                font-size: 0.8rem;
+            }
+
+            .quantity-display {
+                font-size: 0.8rem;
+                min-width: 20px;
+            }
+
+            .cart-sidebar {
+                width: 100%;
+                right: -100%;
+            }
+
+            .cart-sidebar.active {
+                right: 0;
+            }
+
+            .carousel-item {
+                min-width: 200px;
+            }
+            
+            .carousel-title {
+                font-size: 1.8rem;
+            }
+
+            .whatsapp-float {
+                bottom: 15px;
+                right: 15px;
+                width: 55px;
+                height: 55px;
+            }
+            
+            .whatsapp-float span {
+                font-size: 22px;
+            }
+        }
+    </style>
 </head>
 <body>
     <header>
@@ -31,188 +692,18 @@
                 <h3 class="carousel-title">✨ Productos Destacados</h3>
                 <div class="carousel-container">
                     <div class="carousel-track" id="carouselTrack">
-                        <!-- Se genera con JavaScript -->
+                        <!-- Los productos del carrusel se generarán con JavaScript -->
                     </div>
                 </div>
                 <div class="carousel-indicators" id="carouselIndicators">
-                    <!-- Se genera con JavaScript -->
+                    <!-- Los indicadores se generarán con JavaScript -->
                 </div>
             </div>
 
             <h2 style="text-align: center; color: #FFA500; margin: 3rem 0 2rem 0; font-size: 2rem;">🛍️ Catálogo Completo</h2>
             
             <div class="products-grid" id="productsGrid">
-
-                <!-- Aquí van todos los productos pegados tal como me los diste -->
-                <!-- He conservado exactamente el contenido original que me pasaste -->
-                <!-- (copiado directamente sin cortar absolutamente nada) -->
-
-                <div class="product-card">
-                    <div class="product-image">☕</div>
-                    <div class="product-info">
-                        <div class="product-name">Taza Cerámica Premium</div>
-                        <div class="product-description">Taza de cerámica resistente con diseño moderno</div>
-                        <div class="product-price">$1250</div>
-                        <div id="product-1">
-                            <button class="add-to-cart" onclick="addToCartDirect(1)">Agregar al carrito</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="product-card">
-                    <div class="product-image">📓</div>
-                    <div class="product-info">
-                        <div class="product-name">Cuaderno Espiral A4</div>
-                        <div class="product-description">Cuaderno espiral de 80 hojas rayadas</div>
-                        <div class="product-price">$850</div>
-                        <div id="product-2">
-                            <button class="add-to-cart" onclick="addToCartDirect(2)">Agregar al carrito</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="product-card">
-                    <div class="product-image">💡</div>
-                    <div class="product-info">
-                        <div class="product-name">Lámpara LED Escritorio</div>
-                        <div class="product-description">Lámpara LED ajustable con 3 niveles de luz</div>
-                        <div class="product-price">$3200</div>
-                        <div id="product-3">
-                            <button class="add-to-cart" onclick="addToCartDirect(3)">Agregar al carrito</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="product-card">
-                    <div class="product-image">🛋️</div>
-                    <div class="product-info">
-                        <div class="product-name">Almohadón Decorativo</div>
-                        <div class="product-description">Almohadón suave con funda removible</div>
-                        <div class="product-price">$1800</div>
-                        <div id="product-4">
-                            <button class="add-to-cart" onclick="addToCartDirect(4)">Agregar al carrito</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="product-card">
-                    <div class="product-image">📋</div>
-                    <div class="product-info">
-                        <div class="product-name">Organizador Escritorio</div>
-                        <div class="product-description">Organizador de madera con múltiples compartimentos</div>
-                        <div class="product-price">$2100</div>
-                        <div id="product-5">
-                            <button class="add-to-cart" onclick="addToCartDirect(5)">Agregar al carrito</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="product-card">
-                    <div class="product-image">🌱</div>
-                    <div class="product-info">
-                        <div class="product-name">Planta Suculenta</div>
-                        <div class="product-description">Planta suculenta en maceta decorativa</div>
-                        <div class="product-price">$650</div>
-                        <div id="product-6">
-                            <button class="add-to-cart" onclick="addToCartDirect(6)">Agregar al carrito</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="product-card">
-                    <div class="product-image">🖼️</div>
-                    <div class="product-info">
-                        <div class="product-name">Marco Foto 15x20</div>
-                        <div class="product-description">Marco de madera para fotos 15x20cm</div>
-                        <div class="product-price">$950</div>
-                        <div id="product-7">
-                            <button class="add-to-cart" onclick="addToCartDirect(7)">Agregar al carrito</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="product-card">
-                    <div class="product-image">🕯️</div>
-                    <div class="product-info">
-                        <div class="product-name">Vela Aromática</div>
-                        <div class="product-description">Vela perfumada con aroma a vainilla</div>
-                        <div class="product-price">$1400</div>
-                        <div id="product-8">
-                            <button class="add-to-cart" onclick="addToCartDirect(8)">Agregar al carrito</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="product-card">
-                    <div class="product-image">🔗</div>
-                    <div class="product-info">
-                        <div class="product-name">Set Imanes Nevera</div>
-                        <div class="product-description">Set de 6 imanes decorativos coloridos</div>
-                        <div class="product-price">$750</div>
-                        <div id="product-9">
-                            <button class="add-to-cart" onclick="addToCartDirect(9)">Agregar al carrito</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="product-card">
-                    <div class="product-image">🪞</div>
-                    <div class="product-info">
-                        <div class="product-name">Espejo Decorativo</div>
-                        <div class="product-description">Espejo redondo con marco dorado</div>
-                        <div class="product-price">$2800</div>
-                        <div id="product-10">
-                            <button class="add-to-cart" onclick="addToCartDirect(10)">Agregar al carrito</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="product-card">
-                    <div class="product-image">🕐</div>
-                    <div class="product-info">
-                        <div class="product-name">Reloj Pared Moderno</div>
-                        <div class="product-description">Reloj de pared silencioso con diseño minimalista</div>
-                        <div class="product-price">$3500</div>
-                        <div id="product-11">
-                            <button class="add-to-cart" onclick="addToCartDirect(11)">Agregar al carrito</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="product-card">
-                    <div class="product-image">🔋</div>
-                    <div class="product-info">
-                        <div class="product-name">Cargador Inalámbrico</div>
-                        <div class="product-description">Cargador inalámbrico rápido universal</div>
-                        <div class="product-price">$2200</div>
-                        <div id="product-12">
-                            <button class="add-to-cart" onclick="addToCartDirect(12)">Agregar al carrito</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="product-card">
-                    <div class="product-image">🎧</div>
-                    <div class="product-info">
-                        <div class="product-name">Auriculares Bluetooth</div>
-                        <div class="product-description">Auriculares inalámbricos con cancelación de ruido</div>
-                        <div class="product-price">$4800</div>
-                        <div id="product-13">
-                            <button class="add-to-cart" onclick="addToCartDirect(13)">Agregar al carrito</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="product-card">
-                    <div class="product-image">🖱️</div>
-                    <div class="product-info">
-                        <div class="product-name">Mouse Pad Gaming</div>
-                        <div class="product-description">Mouse pad antideslizante para gaming</div>
-                        <div class="product-price">$1200</div>
-                        <div id="product-14">
-                            <button class="add-to-cart" onclick="addToCartDirect(14)">Agregar al carrito</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="product-card">
-                    <div class="product-image">🫖</div>
-                    <div class="product-info">
-                        <div class="product-name">Termo Acero Inoxidable</div>
-                        <div class="product-description">Termo de 1L que mantiene temperatura 12hs</div>
-                        <div class="product-price">$2900</div>
-                        <div id="product-15">
-                            <button class="add-to-cart" onclick="addToCartDirect(15)">Agregar al carrito</button>
-                        </div>
-                    </div>
-                </div>
-
+                <!-- Los productos se cargarán dinámicamente -->
             </div>
         </div>
     </main>
@@ -225,20 +716,365 @@
                 <button class="close-cart" onclick="closeCart()">×</button>
             </div>
             <div class="cart-content" id="cartContent">
-                <!-- Se llena con JavaScript -->
+                <div class="empty-cart">
+                    <h4>🛒 Tu carrito está vacío</h4>
+                    <p>¡Descubre nuestros increíbles productos!</p>
+                    <button class="explore-catalog-btn" onclick="exploreCatalog()">
+                        🛍️ Explorar catálogo
+                    </button>
+                </div>
             </div>
-            <div class="cart-total">
-                <div class="total-amount" id="totalAmount">$0</div>
-                <button class="whatsapp-btn" onclick="sendToWhatsApp()">Enviar pedido por WhatsApp</button>
+            <div class="cart-total" id="cartTotal" style="display: none;">
+                <div class="total-amount">Total: $<span id="totalAmount">0</span></div>
+                <button class="whatsapp-btn" onclick="sendWhatsApp()">
+                    📱 Enviar pedido por WhatsApp
+                </button>
             </div>
         </div>
     </div>
 
     <!-- Botón flotante de WhatsApp -->
-    <a href="#" class="whatsapp-float" onclick="sendToWhatsApp()" title="Enviar por WhatsApp">
-        <span>📱</span>
+    <a href="https://wa.me/5491134223812" target="_blank" class="whatsapp-float" title="Contactar por WhatsApp">
+        <span>💬</span>
     </a>
 
-    <script src="script.js"></script>
+    <script>
+        // Datos de productos
+        const products = [
+            { id: 1, name: "Taza Cerámica Premium", price: 1250, emoji: "☕", description: "Taza de cerámica resistente con diseño moderno" },
+            { id: 2, name: "Cuaderno Espiral A4", price: 850, emoji: "📓", description: "Cuaderno espiral de 80 hojas rayadas" },
+            { id: 3, name: "Lámpara LED Escritorio", price: 3200, emoji: "💡", description: "Lámpara LED ajustable con 3 niveles de luz" },
+            { id: 4, name: "Almohadón Decorativo", price: 1800, emoji: "🛋️", description: "Almohadón suave con funda removible" },
+            { id: 5, name: "Organizador Escritorio", price: 2100, emoji: "📋", description: "Organizador de madera con múltiples compartimentos" },
+            { id: 6, name: "Planta Suculenta", price: 650, emoji: "🌱", description: "Planta suculenta en maceta decorativa" },
+            { id: 7, name: "Marco Foto 15x20", price: 950, emoji: "🖼️", description: "Marco de madera para fotos 15x20cm" },
+            { id: 8, name: "Vela Aromática", price: 1400, emoji: "🕯️", description: "Vela perfumada con aroma a vainilla" },
+            { id: 9, name: "Set Imanes Nevera", price: 750, emoji: "🔗", description: "Set de 6 imanes decorativos coloridos" },
+            { id: 10, name: "Espejo Decorativo", price: 2800, emoji: "🪞", description: "Espejo redondo con marco dorado" },
+            { id: 11, name: "Reloj Pared Moderno", price: 3500, emoji: "🕐", description: "Reloj de pared silencioso con diseño minimalista" },
+            { id: 12, name: "Cargador Inalámbrico", price: 2200, emoji: "🔋", description: "Cargador inalámbrico rápido universal" },
+            { id: 13, name: "Auriculares Bluetooth", price: 4800, emoji: "🎧", description: "Auriculares inalámbricos con cancelación de ruido" },
+            { id: 14, name: "Mouse Pad Gaming", price: 1200, emoji: "🖱️", description: "Mouse pad antideslizante para gaming" },
+            { id: 15, name: "Termo Acero Inoxidable", price: 2900, emoji: "🫖", description: "Termo de 1L que mantiene temperatura 12hs" }
+        ];
+
+        let cart = [];
+        let carouselInterval;
+        let carouselIndex = 0;
+        let carouselPaused = false;
+        let pauseTimeout;
+        const totalSlides = 6;
+
+        // Generar carrusel
+        function generateCarousel() {
+            const track = document.getElementById('carouselTrack');
+            const indicators = document.getElementById('carouselIndicators');
+            
+            // Seleccionar primeros 6 productos para el carrusel
+            const featuredProducts = products.slice(0, 6);
+            
+            // Crear slides con productos duplicados al final para loop infinito
+            const allSlides = [
+                ...featuredProducts,
+                ...featuredProducts.slice(0, 2) // Duplicar los primeros 2 para transición suave
+            ];
+            
+            track.innerHTML = allSlides.map((product, index) => `
+                <div class="carousel-item" onclick="handleCarouselClick(${product.id})" 
+                     data-original-index="${index >= totalSlides ? index - totalSlides : index}">
+                    <span class="carousel-emoji">${product.emoji}</span>
+                    <div class="carousel-product-name">${product.name}</div>
+                    <div class="carousel-product-price">$${product.price}</div>
+                </div>
+            `).join('');
+
+            // Generar indicadores (solo para los 6 productos originales)
+            indicators.innerHTML = featuredProducts.map((_, index) => 
+                `<div class="carousel-dot ${index === 0 ? 'active' : ''}" onclick="goToSlide(${index})"></div>`
+            ).join('');
+        }
+
+        // Manejar click en item del carrusel
+        function handleCarouselClick(productId) {
+            pauseCarousel();
+        }
+
+        // Pausar carrusel
+        function pauseCarousel() {
+            carouselPaused = true;
+            clearInterval(carouselInterval);
+            clearTimeout(pauseTimeout);
+            
+            // Reanudar después de 7 segundos
+            pauseTimeout = setTimeout(() => {
+                carouselPaused = false;
+                startCarousel();
+            }, 7000);
+        }
+
+        // Iniciar carrusel automático
+        function startCarousel() {
+            if (carouselPaused) return;
+            
+            carouselInterval = setInterval(() => {
+                if (!carouselPaused) {
+                    nextSlide();
+                }
+            }, 3000);
+        }
+
+        // Siguiente slide
+        function nextSlide() {
+            carouselIndex++;
+            updateCarousel();
+            
+            // Si llegamos al final de los slides reales, resetear sin transición
+            if (carouselIndex === totalSlides) {
+                setTimeout(() => {
+                    const track = document.getElementById('carouselTrack');
+                    track.classList.add('no-transition');
+                    carouselIndex = 0;
+                    updateCarouselPosition();
+                    
+                    // Restaurar transición después de un frame
+                    requestAnimationFrame(() => {
+                        track.classList.remove('no-transition');
+                    });
+                }, 800); // Esperar a que termine la transición
+            }
+        }
+
+        // Ir a slide específico
+        function goToSlide(index) {
+            carouselIndex = index;
+            updateCarousel();
+            pauseCarousel();
+        }
+
+        // Actualizar posición del carrusel
+        function updateCarouselPosition() {
+            const track = document.getElementById('carouselTrack');
+            const itemWidth = 270; // 250px + 20px gap
+            const offset = -carouselIndex * itemWidth;
+            track.style.transform = `translateX(${offset}px)`;
+        }
+
+        // Actualizar carrusel
+        function updateCarousel() {
+            updateCarouselPosition();
+            
+            // Actualizar indicadores basado en la posición real (módulo para el loop)
+            const indicators = document.querySelectorAll('.carousel-dot');
+            const realIndex = carouselIndex % totalSlides;
+            
+            indicators.forEach((dot, index) => {
+                dot.classList.toggle('active', index === realIndex);
+            });
+        }
+
+        // Agregar al carrito directamente
+        function addToCartDirect(productId) {
+            const product = products.find(p => p.id === productId);
+            const existingItem = cart.find(item => item.id === productId);
+            
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                cart.push({
+                    id: product.id,
+                    name: product.name,
+                    price: product.price,
+                    quantity: 1
+                });
+            }
+            
+            updateProductButton(productId);
+            updateCartDisplay();
+        }
+
+        // Actualizar botón del producto (transformación + número -)
+        function updateProductButton(productId) {
+            const productContainer = document.getElementById(`product-${productId}`);
+            const cartItem = cart.find(item => item.id === productId);
+            
+            if (cartItem && cartItem.quantity > 0) {
+                productContainer.innerHTML = `
+                    <div class="quantity-controls-product">
+                        <button class="quantity-btn-product" onclick="changeProductQuantity(${productId}, -1)">-</button>
+                        <span class="quantity-display">${cartItem.quantity}</span>
+                        <button class="quantity-btn-product" onclick="changeProductQuantity(${productId}, 1)">+</button>
+                    </div>
+                `;
+            } else {
+                productContainer.innerHTML = `
+                    <button class="add-to-cart" onclick="addToCartDirect(${productId})">
+                        Agregar al carrito
+                    </button>
+                `;
+            }
+        }
+
+        // Cambiar cantidad desde el producto
+        function changeProductQuantity(productId, change) {
+            const item = cart.find(item => item.id === productId);
+            if (item) {
+                item.quantity += change;
+                if (item.quantity <= 0) {
+                    cart = cart.filter(cartItem => cartItem.id !== productId);
+                }
+                updateProductButton(productId);
+                updateCartDisplay();
+            }
+        }
+
+        // Actualizar visualización del carrito
+        function updateCartDisplay() {
+            const cartCount = document.getElementById('cartCount');
+            const cartContent = document.getElementById('cartContent');
+            const cartTotal = document.getElementById('cartTotal');
+            const totalAmount = document.getElementById('totalAmount');
+
+            // Actualizar contador
+            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+            cartCount.textContent = totalItems;
+
+            if (cart.length === 0) {
+                cartContent.innerHTML = `
+                    <div class="empty-cart">
+                        <h4>🛒 Tu carrito está vacío</h4>
+                        <p>¡Descubre nuestros increíbles productos!</p>
+                        <button class="explore-catalog-btn" onclick="exploreCatalog()">
+                            🛍️ Explorar catálogo
+                        </button>
+                    </div>
+                `;
+                cartTotal.style.display = 'none';
+                return;
+            }
+
+            // Mostrar items del carrito
+            cartContent.innerHTML = cart.map(item => `
+                <div class="cart-item">
+                    <div class="cart-item-name">${item.name}</div>
+                    <div class="cart-item-details">
+                        <span>$${item.price} c/u</span>
+                        <div class="quantity-controls">
+                            <button class="quantity-btn" onclick="changeQuantity(${item.id}, -1)">-</button>
+                            <span>${item.quantity}</span>
+                            <button class="quantity-btn" onclick="changeQuantity(${item.id}, 1)">+</button>
+                        </div>
+                    </div>
+                    <div style="font-weight: bold; color: #FFA500;">
+                        Total: $${item.price * item.quantity}
+                    </div>
+                </div>
+            `).join('');
+
+            // Calcular total
+            const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            totalAmount.textContent = total;
+            cartTotal.style.display = 'block';
+        }
+
+        // Cambiar cantidad desde el carrito
+        function changeQuantity(productId, change) {
+            const item = cart.find(item => item.id === productId);
+            if (item) {
+                item.quantity += change;
+                if (item.quantity <= 0) {
+                    cart = cart.filter(cartItem => cartItem.id !== productId);
+                }
+                updateProductButton(productId);
+                updateCartDisplay();
+            }
+        }
+
+        // Toggle carrito
+        function toggleCart() {
+            const overlay = document.getElementById('cartOverlay');
+            const sidebar = document.getElementById('cartSidebar');
+            
+            overlay.classList.add('active');
+            setTimeout(() => sidebar.classList.add('active'), 10);
+        }
+
+        // Cerrar carrito
+        function closeCart() {
+            const overlay = document.getElementById('cartOverlay');
+            const sidebar = document.getElementById('cartSidebar');
+            
+            sidebar.classList.remove('active');
+            setTimeout(() => overlay.classList.remove('active'), 300);
+        }
+
+        // Explorar catálogo (cerrar carrito y hacer scroll al catálogo)
+        function exploreCatalog() {
+            closeCart();
+            // Scroll suave hacia el catálogo
+            document.getElementById('productsGrid').scrollIntoView({ 
+                behavior: 'smooth',
+                block: 'start'
+            });
+        }
+
+        // Enviar por WhatsApp
+        function sendWhatsApp() {
+            if (cart.length === 0) return;
+
+            let message = "Hola, buenas ¿cómo va? Quería hacer un pedido:\n\n";
+            
+            cart.forEach(item => {
+                message += `• ${item.name}\n`;
+                message += `  Cantidad: ${item.quantity}\n`;
+                message += `  Total: $${item.price * item.quantity}\n\n`;
+            });
+
+            const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            message += `*Total del pedido: $${total}*`;
+
+            const encodedMessage = encodeURIComponent(message);
+            const whatsappUrl = `https://wa.me/5491134223812?text=${encodedMessage}`;
+            
+            window.open(whatsappUrl, '_blank');
+        }
+
+        // Generar productos display
+        function generateProducts() {
+            const grid = document.getElementById('productsGrid');
+            
+            const productsHTML = products.map(product => `
+                <div class="product-card">
+                    <div class="product-image">${product.emoji}</div>
+                    <div class="product-info">
+                        <div class="product-name">${product.name}</div>
+                        <div class="product-description">${product.description}</div>
+                        <div class="product-price">$${product.price}</div>
+                        <div id="product-${product.id}">
+                            <button class="add-to-cart" onclick="addToCartDirect(${product.id})">
+                                Agregar al carrito
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+
+            grid.innerHTML = productsHTML;
+        }
+
+        // Inicializar
+        document.addEventListener('DOMContentLoaded', function() {
+            generateProducts();
+            generateCarousel();
+            updateCartDisplay();
+            startCarousel();
+        });
+
+        // Cerrar carrito con Escape
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                closeCart();
+            }
+        });
+    </script>
 </body>
 </html>
