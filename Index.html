@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="es" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Minhag Kosher - Alimentos Kosher Certificados</title>
+  <link rel="stylesheet" href="styles.css" />
+  
+</head>
+<body>
+<header>
+  <nav class="container">
+    <a href="#" class="logo">
+      <img src="https://i.ibb.co/vvVj3gxB/minhag-kosher-logo.jpg" alt="Minhag Kosher Logo" class="logo-img" />
+    </a>
+
+    <ul class="nav-links">
+      <li><a href="#inicio">Inicio</a></li>
+      <li><a href="#catalogo">Catálogo</a></li>
+      <li><a href="#sobre-nosotros">Sobre nosotros</a></li>
+      <li><a href="#supervision">Supervisión rabínica</a></li>
+      <li><a href="#contacto">Contacto</a></li>
+    </ul>
+
+    <button class="mobile-menu" aria-label="Menú móvil">☰</button>
+  </nav>
+</header>
+
+<main>
+  <section id="inicio" class="hero">
+    <div class="container">
+      <h1>Minhag Kosher</h1>
+      <p>Bienvenidos a Minhag Kosher, donde tradición, calidad y halajá se encuentran en cada bocado.</p>
+      <a href="#catalogo" class="cta-button">Ver Catálogo</a>
+    </div>
+  </section>
+
+  <section id="supervision" class="certification">
+    <div class="container">
+      <h2>Certificación Rabínica</h2>
+      <p>Todos nuestros productos cuentan con la supervisión y certificación del reconocido Rab Bobek, garantizando el cumplimiento estricto de las leyes del kashrut.</p>
+      <div class="rabbi-seal">
+        <strong>✡ Supervisado por Rab Mordejai Bobek ✡</strong>
+      </div>
+    </div>
+  </section>
+
+  <section id="catalogo" class="categories">
+    <div class="container">
+      <h2>Nuestro Catálogo</h2>
+
+      <div class="category-filters">
+        <button class="filter-btn active" data-category="all">Todos</button>
+        <button class="filter-btn" data-category="lacteos">Lácteos</button>
+        <button class="filter-btn" data-category="parve">Parve</button>
+        <button class="filter-btn" data-category="panaderia">Panadería</button>
+      </div>
+
+      <div class="categories-grid" id="productos">
+        <div class="category-card lacteos" data-id="1" data-nombre="Tortas Lácteas">
+          <img src="https://i.ibb.co/4Z23sHsb/Imagen-de-Whats-App-2025-07-26-a-las-21-54-37-efc6d142.jpg" alt="Tortas Lácteas" />
+          <h3>Tortas Lácteas</h3>
+          <div class="controls" id="control-1">
+            <button class="btn-add" onclick="agregarAlCarrito(1)">Agregar al carrito</button>
+          </div>
+        </div>
+
+        <div class="category-card lacteos" data-id="2" data-nombre="Tartas Lácteas">
+          <img src="https://i.ibb.co/JjTrJqjc/Imagen-de-Whats-App-2025-07-26-a-las-21-54-37-78fade16.jpg" alt="Tartas Lácteas" />
+          <h3>Tartas Lácteas</h3>
+          <div class="controls" id="control-2">
+            <button class="btn-add" onclick="agregarAlCarrito(2)">Agregar al carrito</button>
+          </div>
+        </div>
+
+        <div class="category-card parve" data-id="3" data-nombre="Tartas Parve">
+          <img src="https://i.ibb.co/zHrPMVmL/Imagen-de-Whats-App-2025-07-26-a-las-21-54-38-779c519e.jpg" alt="Tartas Parve" />
+          <h3>Tartas Parve</h3>
+          <div class="controls" id="control-3">
+            <button class="btn-add" onclick="agregarAlCarrito(3)">Agregar al carrito</button>
+          </div>
+        </div>
+
+        <div class="category-card parve" data-id="4" data-nombre="Tortas Parve">
+          <img src="https://i.ibb.co/vC57x5nV/Imagen-de-Whats-App-2025-07-26-a-las-21-54-37-9b250967.jpg" alt="Tortas Parve" />
+          <h3>Tortas Parve</h3>
+          <div class="controls" id="control-4">
+            <button class="btn-add" onclick="agregarAlCarrito(4)">Agregar al carrito</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="sobre-nosotros" class="about">
+    <div class="container">
+      <div class="about-content">
+        <div class="about-text">
+          <h2>Sobre Nosotros</h2>
+          <p>En Minhag Kosher, entendemos que la alimentación kosher va más allá de seguir reglas...</p>
+        </div>
+        <div class="about-image">✡</div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer id="contacto">
+  <div class="container">
+    <div class="footer-content">
+      <!-- Botón WhatsApp en el centro -->
+      <div class="footer-whatsapp-button">
+        <div class="footer-whatsapp-icon" onclick="toggleOptions(event)">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" />
+        </div>
+        <div class="footer-whatsapp-options" id="whatsappOptionsFooter">
+          <a href="https://wa.me/5491160111688" target="_blank">+54 9 11 6011-1688</a>
+          <a href="https://wa.me/5491126931438" target="_blank">+54 9 11 2693-1438</a>
+        </div>
+      </div>
+
+      <!-- Dirección con fondo azul y texto blanco -->
+      <div class="footer-location">
+        <a href="https://www.google.com/maps?q=Terrada+592,+CABA" target="_blank" title="Ver en Google Maps">
+          <img src="https://img.icons8.com/ios-filled/20/ffffff/marker.png" alt="Ubicación" />
+          Terrada 592, CABA (Flores)
+        </a>
+      </div>
+    </div>
+
+    <div class="footer-bottom" style="margin-top: 20px;">
+      <p>&copy; 2025 Minhag Kosher. Todos los derechos reservados.</p>
+    </div>
+  </div>
+</footer>
+
+<!-- Botón flotante WhatsApp -->
+<div class="whatsapp-float" onclick="toggleOptions(event)">
+  <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" />
+</div>
+
+<!-- Opciones desplegables compartidas -->
+<div class="whatsapp-options" id="whatsappOptions">
+  <a href="https://wa.me/5491160111688" target="_blank">+54 9 11 6011-1688</a>
+  <a href="https://wa.me/5491126931438" target="_blank">+54 9 11 2693-1438</a>
+</div>
+
+<!-- Botón carrito fijo -->
+<div class="carrito-btn" aria-label="Abrir carrito" role="button" tabindex="0" onclick="toggleCarrito()">
+  🛒 Carrito
+</div>
+
+<!-- Panel lateral carrito -->
+<div class="carrito-panel" id="carritoPanel" aria-hidden="true" role="dialog" aria-label="Resumen del pedido">
+  <button class="carrito-cerrar" aria-label="Cerrar carrito" onclick="toggleCarrito()">&times;</button>
+  <h3>Tu pedido</h3>
+  <ul id="listaProductos">
+    <li>Tu carrito está vacío</li>
+  </ul>
+  <button class="btn-enviar" onclick="enviarWhatsApp()">Enviar por WhatsApp</button>
+</div>
+
+<!-- Modal para ingresar nombre y apellido -->
+<div id="modalNombre" class="modal">
+  <div class="modal-contenido">
+    <span class="cerrar" onclick="cerrarModal()">&times;</span>
+    <h2>Antes de enviar tu pedido</h2>
+    <label for="nombreCliente">Nombre y Apellido:</label>
+    <input type="text" id="nombreCliente" placeholder="Ej: Juan Pérez" />
+    <button onclick="confirmarEnvio()">Enviar por WhatsApp</button>
+  </div>
+  </div>
+<script src="script.js"></script>
+</body>
+</html>
